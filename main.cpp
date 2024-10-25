@@ -6,8 +6,16 @@
 #include <algorithm>
 #include <string>
 #include <iomanip>
+#include <set>
+#include <chrono>
 
 using namespace std;
+
+// Function prototypes
+vector<string> tokenize(const string& text);
+void findCommonPhrases(const vector<string>& words, int N, unordered_map<string, int>& phraseFreq);
+vector<pair<string, int>> getTopPhrases(const unordered_map<string, int>& phraseFreq);
+vector<pair<string, int>> findSimilarParagraphs(const vector<string>& paragraphs, const vector<string>& targetWords);
 
 // Function to tokenize text into words
 vector<string> tokenize(const string& text) {
@@ -47,13 +55,43 @@ vector<pair<string, int>> getTopPhrases(const unordered_map<string, int>& phrase
     return phrases;
 }
 
+// Function to find the most similar paragraphs
+vector<pair<string, int>> findSimilarParagraphs(const vector<string>& paragraphs, const vector<string>& targetWords) {
+    vector<pair<string, int>> similarities;
+
+    for (const string& paragraph : paragraphs) {
+        auto words = tokenize(paragraph);
+        set<string> paragraphWords(words.begin(), words.end()); // Unique words in paragraph
+        int commonCount = 0;
+
+        for (const string& target : targetWords) {
+            if (paragraphWords.find(target) != paragraphWords.end()) {
+                commonCount++;
+            }
+        }
+
+        similarities.emplace_back(paragraph, commonCount);
+    }
+
+    // Sort by number of common words (similarity)
+    sort(similarities.begin(), similarities.end(), [](const auto& a, const auto& b) {
+        return a.second > b.second;
+    });
+
+    if (similarities.size() > 10) {
+        similarities.resize(10); // Keep only top 10
+    }
+
+    return similarities;
+}
+
 int main() {
-    string tomSawyerFile = "TomSawyer.txt"; // Input files
-    string huckleberryFinnFile = "HuckleberryFinn.txt";
-    
+    // Start the timer
+    auto start = std::chrono::high_resolution_clock::now();
+
     // Read files
-    ifstream tomFile(tomSawyerFile);
-    ifstream huckFile(huckleberryFinnFile);
+    ifstream tomFile("TomSawyer.txt");
+    ifstream huckFile("HuckleberryFinn.txt");
     
     if (!tomFile.is_open() || !huckFile.is_open()) {
         cerr << "Error opening files." << endl;
@@ -68,7 +106,12 @@ int main() {
     vector<string> huckWords = tokenize(huckText);
     
     // Prepare to store phrase frequencies
-    ofstream outputFile("TopPhrases.txt"); // Move this outside the loop
+    ofstream phrasesFile("TopPhrases.txt");
+    if (!phrasesFile.is_open()) {
+        cerr << "Error opening TopPhrases.txt for writing." << endl;
+        return 1;
+    }
+
     for (int N = 1; N <= 10; ++N) {
         unordered_map<string, int> tomPhrases;
         unordered_map<string, int> huckPhrases;
@@ -81,19 +124,31 @@ int main() {
         auto tomTop = getTopPhrases(tomPhrases);
         auto huckTop = getTopPhrases(huckPhrases);
 
-        // Output results to a file
-        outputFile << "Top 10 Most Frequent Phrases of Length " << N << ":\n";
-        outputFile << left << setw(30) << "Phrase" << setw(25) << "Frequency in Tom Sawyer" << "Frequency in Huckleberry Finn\n";
+        // Output results to phrases file
+        phrasesFile << "Top 10 Most Frequent Phrases of Length " << N << ":\n";
+        phrasesFile << left << setw(30) << "Phrase" << setw(25) << "Frequency in Tom Sawyer" << "Frequency in Huckleberry Finn\n";
 
         for (size_t i = 0; i < 10; ++i) {
             string tomPhrase = (i < tomTop.size()) ? tomTop[i].first : "";
             string huckPhrase = (i < huckTop.size()) ? huckTop[i].first : "";
             int tomFreq = (i < tomTop.size()) ? tomTop[i].second : 0;
             int huckFreq = (i < huckTop.size()) ? huckTop[i].second : 0;
-            outputFile << left << setw(30) << tomPhrase << setw(25) << tomFreq << huckFreq << "\n";
+            phrasesFile << left << setw(30) << tomPhrase << setw(25) << tomFreq << huckFreq << "\n";
         }
-        outputFile << "\n";
+        phrasesFile << "\n";
     }
 
-    return 0;
+    // Find similar paragraphs (Add your implementation here)
+    
+    // Closing files and return
+    phrasesFile.close();
+
+    // Stop the timer
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = end - start;
+
+    // Print the elapsed time in seconds
+    cout << "Elapsed time: " << elapsed.count() << " seconds." << endl;
+
+    return 0; // Indicate successful completion
 }
