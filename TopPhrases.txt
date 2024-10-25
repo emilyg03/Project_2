@@ -1,0 +1,130 @@
+Top 10 Most Frequent Phrases of Length 1:
+Phrase                        Frequency in Tom Sawyer  Frequency in Huckleberry Finn
+the                           3490                     6080
+and                           2936                     4715
+a                             1789                     3211
+to                            1784                     2985
+of                            1563                     2942
+was                           1163                     2108
+it                            1005                     2058
+in                            962                      1752
+that                          875                      1462
+he                            864                      1403
+
+Top 10 Most Frequent Phrases of Length 2:
+Phrase                        Frequency in Tom Sawyer  Frequency in Huckleberry Finn
+of the                        382                      438
+in the                        309                      362
+to the                        179                      314
+and the                       177                      289
+it was                        121                      269
+was a                         113                      249
+with a                        112                      239
+he was                        111                      224
+and then                      105                      220
+in a                          101                      201
+
+Top 10 Most Frequent Phrases of Length 3:
+Phrase                        Frequency in Tom Sawyer  Frequency in Huckleberry Finn
+there was a                   24                       62
+out of the                    22                       54
+There was a                   20                       53
+I dont know                   19                       47
+Project Gutenbergtm electronic 18                       38
+all the time                  15                       38
+to be a                       15                       34
+the Project Gutenberg         15                       33
+out of his                    15                       32
+there was no                  14                       31
+
+Top 10 Most Frequent Phrases of Length 4:
+Phrase                        Frequency in Tom Sawyer  Frequency in Huckleberry Finn
+Project Gutenberg Literary Archive 13                       22
+Gutenberg Literary Archive Foundation 13                       21
+Project Gutenbergtm electronic works 12                       20
+the Project Gutenberg Literary 11                       15
+terms of this agreement       9                        15
+the rest of the               9                        15
+the terms of this             8                        14
+from time to time             7                        13
+the middle of the             7                        13
+Project Gutenbergtm electronic work 6                        13
+
+Top 10 Most Frequent Phrases of Length 5:
+Phrase                        Frequency in Tom Sawyer  Frequency in Huckleberry Finn
+Project Gutenberg Literary Archive Foundation 13                       14
+the Project Gutenberg Literary Archive 11                       13
+the terms of this agreement   7                        11
+to the Project Gutenberg Literary 6                        9
+the full Project Gutenbergtm License 4                        9
+it occurred to him that       4                        8
+Avenger of the Spanish Main   4                        7
+of Project Gutenbergtm electronic works 4                        6
+Black Avenger of the Spanish  4                        6
+the old man and his           3                        6
+
+Top 10 Most Frequent Phrases of Length 6:
+Phrase                        Frequency in Tom Sawyer  Frequency in Huckleberry Finn
+the Project Gutenberg Literary Archive Foundation 11                       11
+to the Project Gutenberg Literary Archive 6                        6
+Black Avenger of the Spanish Main 4                        4
+owner of the Project Gutenbergtm trademark 3                        4
+the owner of the Project Gutenbergtm 3                        4
+And so forth and so on        3                        4
+to be bound by the terms      2                        3
+Sawyer Complete by Mark Twain Samuel 2                        3
+I wanted to Well why dont     2                        3
+with the terms of this agreement 2                        3
+
+Top 10 Most Frequent Phrases of Length 7:
+Phrase                        Frequency in Tom Sawyer  Frequency in Huckleberry Finn
+to the Project Gutenberg Literary Archive Foundation 6                        6
+the owner of the Project Gutenbergtm trademark 3                        3
+I dont know how to give him   2                        3
+put his face in his hands and 2                        2
+the Project Gutenberg Literary Archive Foundation and 2                        2
+the Black Avenger of the Spanish Main 2                        2
+included with this eBook or online at 2                        2
+At the end of half an hour    2                        2
+away or reuse it under the terms 2                        2
+Project Gutenberg License included with this eBook 2                        2
+
+Top 10 Most Frequent Phrases of Length 8:
+Phrase                        Frequency in Tom Sawyer  Frequency in Huckleberry Finn
+Adventures of Tom Sawyer Complete by Mark Twain 2                        2
+doodlebug tell me what I want to know 2                        2
+anywhere at no cost and with almost no 2                        2
+if I wanted to Well why dont you 2                        2
+whatsoever You may copy it give it away 2                        2
+terms of the Project Gutenberg License included with 2                        2
+You may copy it give it away or 2                        2
+the Project Gutenberg License included with this eBook 2                        2
+it give it away or reuse it under 2                        2
+copy it give it away or reuse it 2                        2
+
+Top 10 Most Frequent Phrases of Length 9:
+Phrase                        Frequency in Tom Sawyer  Frequency in Huckleberry Finn
+anywhere at no cost and with almost no restrictions 2                        2
+to be bound by the terms of this agreement 2                        2
+agree to be bound by the terms of this 2                        2
+give it away or reuse it under the terms 2                        2
+and with almost no restrictions whatsoever You may copy 2                        2
+Doodlebug doodlebug tell me what I want to know 2                        2
+the use of anyone anywhere at no cost and 2                        2
+for the use of anyone anywhere at no cost 2                        2
+away or reuse it under the terms of the 2                        2
+with almost no restrictions whatsoever You may copy it 2                        2
+
+Top 10 Most Frequent Phrases of Length 10:
+Phrase                        Frequency in Tom Sawyer  Frequency in Huckleberry Finn
+use of anyone anywhere at no cost and with almost 2                        2
+give it away or reuse it under the terms of 2                        2
+almost no restrictions whatsoever You may copy it give it 2                        2
+eBook is for the use of anyone anywhere at no 2                        2
+at no cost and with almost no restrictions whatsoever You 2                        2
+the Project Gutenberg License included with this eBook or online 2                        2
+and with almost no restrictions whatsoever You may copy it 2                        2
+restrictions whatsoever You may copy it give it away or 2                        2
+it under the terms of the Project Gutenberg License included 2                        2
+under the terms of the Project Gutenberg License included with 2                        2
+

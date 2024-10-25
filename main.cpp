@@ -17,7 +17,9 @@ vector<string> tokenize(const string& text) {
     while (ss >> word) {
         // Clean word from punctuation
         word.erase(remove_if(word.begin(), word.end(), ::ispunct), word.end());
-        words.push_back(word);
+        if (!word.empty()) { // Avoid adding empty words
+            words.push_back(word);
+        }
     }
     return words;
 }
@@ -53,6 +55,11 @@ int main() {
     ifstream tomFile(tomSawyerFile);
     ifstream huckFile(huckleberryFinnFile);
     
+    if (!tomFile.is_open() || !huckFile.is_open()) {
+        cerr << "Error opening files." << endl;
+        return 1;
+    }
+    
     string tomText((istreambuf_iterator<char>(tomFile)), istreambuf_iterator<char>());
     string huckText((istreambuf_iterator<char>(huckFile)), istreambuf_iterator<char>());
     
@@ -61,6 +68,7 @@ int main() {
     vector<string> huckWords = tokenize(huckText);
     
     // Prepare to store phrase frequencies
+    ofstream outputFile("TopPhrases.txt"); // Move this outside the loop
     for (int N = 1; N <= 10; ++N) {
         unordered_map<string, int> tomPhrases;
         unordered_map<string, int> huckPhrases;
@@ -74,7 +82,6 @@ int main() {
         auto huckTop = getTopPhrases(huckPhrases);
 
         // Output results to a file
-        ofstream outputFile("TopPhrases.txt", ios::app);
         outputFile << "Top 10 Most Frequent Phrases of Length " << N << ":\n";
         outputFile << left << setw(30) << "Phrase" << setw(25) << "Frequency in Tom Sawyer" << "Frequency in Huckleberry Finn\n";
 
