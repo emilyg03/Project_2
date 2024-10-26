@@ -15,7 +15,21 @@ using namespace std;
 vector<string> tokenize(const string& text);
 void findCommonPhrases(const vector<string>& words, int N, unordered_map<string, int>& phraseFreq);
 vector<pair<string, int>> getTopPhrases(const unordered_map<string, int>& phraseFreq);
-vector<pair<string, int>> findSimilarParagraphs(const vector<string>& paragraphs, const vector<string>& targetWords);
+vector<pair<string, int>> findSimilarParagraphs(const vector<string>& paragraphs, const set<string>& targetWords);
+vector<string> readParagraphs(const string& filename);
+vector<string> readFile(const string& filename);
+
+// Function to read the contents of a file into a string
+vector<string> readFile(const string& filename) {
+    ifstream file(filename);
+    if (!file.is_open()) {
+        cerr << "Error opening " << filename << endl;
+        return {};
+    }
+    stringstream buffer;
+    buffer << file.rdbuf(); // Read the entire file into a stringstream
+    return { buffer.str() }; // Return as a vector of one string
+}
 
 // Function to tokenize text into words
 vector<string> tokenize(const string& text) {
@@ -46,7 +60,7 @@ void findCommonPhrases(const vector<string>& words, int N, unordered_map<string,
 // Function to get top 10 phrases
 vector<pair<string, int>> getTopPhrases(const unordered_map<string, int>& phraseFreq) {
     vector<pair<string, int>> phrases(phraseFreq.begin(), phraseFreq.end());
-    sort(phrases.begin(), phrases.end(), [](const auto& a, const auto& b) {
+    sort(phrases.begin(), phrases.end(), [](const pair<string, int>& a, const pair<string, int>& b) {
         return a.second > b.second; // Sort by frequency
     });
     if (phrases.size() > 10) {
@@ -55,17 +69,41 @@ vector<pair<string, int>> getTopPhrases(const unordered_map<string, int>& phrase
     return phrases;
 }
 
-// Function to find the most similar paragraphs
-vector<pair<string, int>> findSimilarParagraphs(const vector<string>& paragraphs, const vector<string>& targetWords) {
+// Function to read paragraphs from a file
+vector<string> readParagraphs(const string& filename) {
+    ifstream file(filename);
+    if (!file.is_open()) {
+        cerr << "Error opening " << filename << endl;
+        return {};
+    }
+    vector<string> paragraphs;
+    string paragraph, line;
+    while (getline(file, line)) {
+        if (line.empty() && !paragraph.empty()) { // New paragraph
+            paragraphs.push_back(paragraph);
+            paragraph.clear();
+        } else {
+            paragraph += line + " ";
+        }
+    }
+    if (!paragraph.empty()) { // Last paragraph
+        paragraphs.push_back(paragraph);
+    }
+    return paragraphs;
+}
+
+// Function to find the most similar paragraphs based on common words
+vector<pair<string, int>> findSimilarParagraphs(const vector<string>& paragraphs, const set<string>& targetWords) {
     vector<pair<string, int>> similarities;
 
     for (const string& paragraph : paragraphs) {
         auto words = tokenize(paragraph);
         set<string> paragraphWords(words.begin(), words.end()); // Unique words in paragraph
-        int commonCount = 0;
 
-        for (const string& target : targetWords) {
-            if (paragraphWords.find(target) != paragraphWords.end()) {
+        // Count common words
+        int commonCount = 0;
+        for (const string& word : paragraphWords) {
+            if (targetWords.find(word) != targetWords.end()) {
                 commonCount++;
             }
         }
@@ -74,7 +112,7 @@ vector<pair<string, int>> findSimilarParagraphs(const vector<string>& paragraphs
     }
 
     // Sort by number of common words (similarity)
-    sort(similarities.begin(), similarities.end(), [](const auto& a, const auto& b) {
+    sort(similarities.begin(), similarities.end(), [](const pair<string, int>& a, const pair<string, int>& b) {
         return a.second > b.second;
     });
 
@@ -87,30 +125,23 @@ vector<pair<string, int>> findSimilarParagraphs(const vector<string>& paragraphs
 
 int main() {
     // Start the timer
-    auto start = std::chrono::high_resolution_clock::now();
+    auto start = chrono::high_resolution_clock::now();
 
     // Read files
-    ifstream tomFile("TomSawyer.txt");
-    ifstream huckFile("HuckleberryFinn.txt");
-    
-    if (!tomFile.is_open() || !huckFile.is_open()) {
-        cerr << "Error opening files." << endl;
-        return 1;
-    }
-    
-    string tomText((istreambuf_iterator<char>(tomFile)), istreambuf_iterator<char>());
-    string huckText((istreambuf_iterator<char>(huckFile)), istreambuf_iterator<char>());
-    
-    // Tokenize text into words
-    vector<string> tomWords = tokenize(tomText);
-    vector<string> huckWords = tokenize(huckText);
-    
+    string tomText = readFile("TomSawyer.txt")[0];
+    string huckText = readFile("HuckleberryFinn.txt")[0];
+    vector<string> longParagraphs = readParagraphs("LongParagraph.txt");
+
     // Prepare to store phrase frequencies
     ofstream phrasesFile("TopPhrases.txt");
     if (!phrasesFile.is_open()) {
         cerr << "Error opening TopPhrases.txt for writing." << endl;
         return 1;
     }
+
+    // Tokenize text into words
+    vector<string> tomWords = tokenize(tomText);
+    vector<string> huckWords = tokenize(huckText);
 
     for (int N = 1; N <= 10; ++N) {
         unordered_map<string, int> tomPhrases;
@@ -119,7 +150,7 @@ int main() {
         // Find phrases for both novels
         findCommonPhrases(tomWords, N, tomPhrases);
         findCommonPhrases(huckWords, N, huckPhrases);
-        
+
         // Get top 10 phrases
         auto tomTop = getTopPhrases(tomPhrases);
         auto huckTop = getTopPhrases(huckPhrases);
@@ -138,14 +169,42 @@ int main() {
         phrasesFile << "\n";
     }
 
-    // Find similar paragraphs (Add your implementation here)
-    
-    // Closing files and return
+    // Find similar paragraphs
+    set<string> targetWords;
+    for (const string& longParagraph : longParagraphs) {
+        auto words = tokenize(longParagraph);
+        targetWords.insert(words.begin(), words.end());
+    }
+
+    vector<string> tomParagraphs = readParagraphs("TomSawyer.txt");
+    vector<string> huckParagraphs = readParagraphs("HuckleberryFinn.txt");
+
+    vector<pair<string, int>> tomSimilar = findSimilarParagraphs(tomParagraphs, targetWords);
+    vector<pair<string, int>> huckSimilar = findSimilarParagraphs(huckParagraphs, targetWords);
+
+    // Write similar paragraphs to TopParagraphs.txt
+    ofstream paragraphsFile("TopParagraphs.txt");
+    if (!paragraphsFile.is_open()) {
+        cerr << "Error opening TopParagraphs.txt for writing." << endl;
+        return 1;
+    }
+
+    paragraphsFile << "Top 10 Similar Paragraphs from Tom Sawyer:\n";
+    for (const auto& pair : tomSimilar) {
+        paragraphsFile << pair.first << "\n";
+    }
+    paragraphsFile << "\nTop 10 Similar Paragraphs from Huckleberry Finn:\n";
+    for (const auto& pair : huckSimilar) {
+        paragraphsFile << pair.first << "\n";
+    }
+
+    // Closing files
     phrasesFile.close();
+    paragraphsFile.close();
 
     // Stop the timer
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> elapsed = end - start;
+    auto end = chrono::high_resolution_clock::now();
+    chrono::duration<double> elapsed = end - start;
 
     // Print the elapsed time in seconds
     cout << "Elapsed time: " << elapsed.count() << " seconds." << endl;
