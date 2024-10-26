@@ -1,3 +1,4 @@
+// Emily Gomez CSCI-3333-02 Fall-24
 #include <iostream>
 #include <fstream>
 #include <sstream>    // string stream operations
@@ -11,7 +12,7 @@
 
 using namespace std;
 
-// function prototypes
+// Function prototypes
 vector<string> tokenize(const string& text);
 void findCommonPhrases(const vector<string>& words, int N, unordered_map<string, int>& phraseFreq);
 vector<pair<string, int>> getTopPhrases(const unordered_map<string, int>& phraseFreq);
@@ -19,7 +20,7 @@ vector<pair<string, int>> findSimilarParagraphs(const vector<string>& paragraphs
 vector<string> readParagraphs(const string& filename);
 vector<string> readFile(const string& filename);
 
-// function -> read the contents of file into a string
+// Function -> read the contents of file into a string
 vector<string> readFile(const string& filename) {
     ifstream file(filename);    // open files
     if (!file.is_open()) {
@@ -31,21 +32,21 @@ vector<string> readFile(const string& filename) {
     return { buffer.str() }; // return as vector of one string
 }
 
-// function -> tokenize text into words
+// Function -> tokenize text into words
 vector<string> tokenize(const string& text) { 
     vector<string> words;     // store words
     stringstream ss(text);   // stringstream from the text
     string word;
-    while (ss >> word) {    //extract words
+    while (ss >> word) {    // extract words
         word.erase(remove_if(word.begin(), word.end(), ::ispunct), word.end());
         if (!word.empty()) {                // safe case against adding empty words
             words.push_back(word);
         }
     }
-    return words;   // lsit of words
+    return words;   // list of words
 }
 
-// function -> find most common phrases of length N
+// Function -> find most common phrases of length N
 void findCommonPhrases(const vector<string>& words, int N, unordered_map<string, int>& phraseFreq) {
     for (size_t i = 0; i <= words.size() - N; ++i) {
         string phrase;
@@ -56,21 +57,21 @@ void findCommonPhrases(const vector<string>& words, int N, unordered_map<string,
     }
 }
 
-// function -> top 10 phrases
+// Function -> top 10 phrases
 vector<pair<string, int>> getTopPhrases(const unordered_map<string, int>& phraseFreq) {
     vector<pair<string, int>> phrases(phraseFreq.begin(), phraseFreq.end());      // copy phrases to vector
     sort(phrases.begin(), phrases.end(), [](const pair<string, int>& a, const pair<string, int>& b) {
         return a.second > b.second; // sort by frequency
     });
     if (phrases.size() > 10) {
-        phrases.resize(10); // only grab top10
+        phrases.resize(10); // only grab top 10
     }
     return phrases; // return top 10
 }
 
-// function -> read paragraphs from file
+// Function -> read paragraphs from file
 vector<string> readParagraphs(const string& filename) {
-    ifstream file(filename);  //open
+    ifstream file(filename);  // open
     if (!file.is_open()) {
         cerr << "Error opening " << filename << endl;   // safe case
         return {};
@@ -88,10 +89,10 @@ vector<string> readParagraphs(const string& filename) {
     if (!paragraph.empty()) { // last paragraph
         paragraphs.push_back(paragraph);
     }
-    return paragraphs;  // list of paragraphjs
+    return paragraphs;  // list of paragraphs
 }
 
-// function -> find the most similar paragraphs
+// Function -> find the most similar paragraphs
 vector<pair<string, int>> findSimilarParagraphs(const vector<string>& paragraphs, const set<string>& targetWords) {
     vector<pair<string, int>> similarities;       // vector -> store paragraph and similarity count
 
@@ -119,7 +120,7 @@ vector<pair<string, int>> findSimilarParagraphs(const vector<string>& paragraphs
         similarities.resize(10); // keep only top 10
     }
 
-    return similarities; // return sililar paragraphs
+    return similarities; // return similar paragraphs
 }
 
 int main() {
@@ -127,14 +128,14 @@ int main() {
     auto start = chrono::high_resolution_clock::now();
 
     // read files
-    string tomText = readFile("TomSawyer.txt")[0];
-    string huckText = readFile("HuckleberryFinn.txt")[0];
-    vector<string> longParagraphs = readParagraphs("LongParagraph.txt");
+    string tomText = readFile("tomSawyer.txt")[0];
+    string huckText = readFile("huckleberryFinn.txt")[0];
+    vector<string> longParagraphs = readParagraphs("longParagraph.txt");
 
     // prepare to store phrase frequencies
-    ofstream phrasesFile("TopPhrases.txt");     // output file
+    ofstream phrasesFile("top10Phrases.txt");     // output file
     if (!phrasesFile.is_open()) {
-        cerr << "Error opening TopPhrases.txt for writing." << endl;        //safe case
+        cerr << "Error opening top10Phrases.txt for writing." << endl;        // safe case
         return 1;
     }
 
@@ -159,13 +160,13 @@ int main() {
         phrasesFile << left << setw(30) << "Phrase" << setw(25) << "Frequency in Tom Sawyer" << "Frequency in Huckleberry Finn\n";
 
         for (size_t i = 0; i < 10; ++i) {
-            string tomPhrase = (i < tomTop.size()) ? tomTop[i].first : "";   //get phrase
+            string tomPhrase = (i < tomTop.size()) ? tomTop[i].first : "";   // get phrase
             string huckPhrase = (i < huckTop.size()) ? huckTop[i].first : "";
             int tomFreq = (i < tomTop.size()) ? tomTop[i].second : 0;   // get frequency
             int huckFreq = (i < huckTop.size()) ? huckTop[i].second : 0;
             phrasesFile << left << setw(30) << tomPhrase << setw(25) << tomFreq << huckFreq << "\n";   // write to file
         }
-        phrasesFile << "\n";    //styling
+        phrasesFile << "\n";    // styling
     }
 
     // find similar paragraphs
@@ -175,16 +176,16 @@ int main() {
         targetWords.insert(words.begin(), words.end());
     }
 
-    vector<string> tomParagraphs = readParagraphs("TomSawyer.txt");
-    vector<string> huckParagraphs = readParagraphs("HuckleberryFinn.txt");
+    vector<string> tomParagraphs = readParagraphs("tomSawyer.txt");
+    vector<string> huckParagraphs = readParagraphs("huckleberryFinn.txt");
 
     vector<pair<string, int>> tomSimilar = findSimilarParagraphs(tomParagraphs, targetWords);
     vector<pair<string, int>> huckSimilar = findSimilarParagraphs(huckParagraphs, targetWords);
 
     // write similar paragraphs to TopParagraphs.txt
-    ofstream paragraphsFile("TopParagraphs.txt");    // outut file
+    ofstream paragraphsFile("Top10Paragraphs.txt");    // output file
     if (!paragraphsFile.is_open()) {        
-        cerr << "Error opening TopParagraphs.txt for writing." << endl;       // safe case
+        cerr << "Error opening Top10Paragraphs.txt for writing." << endl;       // safe case
         return 1;
     }
 
