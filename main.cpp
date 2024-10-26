@@ -92,7 +92,7 @@ vector<string> readParagraphs(const string& filename) {
     return paragraphs;
 }
 
-// Function to find the most similar paragraphs based on common words
+// Function to find the most similar paragraphs
 vector<pair<string, int>> findSimilarParagraphs(const vector<string>& paragraphs, const set<string>& targetWords) {
     vector<pair<string, int>> similarities;
 
@@ -189,13 +189,14 @@ int main() {
         return 1;
     }
 
-    paragraphsFile << "Top 10 Similar Paragraphs from Tom Sawyer:\n";
-    for (const auto& pair : tomSimilar) {
-        paragraphsFile << pair.first << "\n";
+    paragraphsFile << "Top 10 Similar Paragraphs from Tom Sawyer (Similarity based on common word count):\n";
+    for (size_t i = 0; i < tomSimilar.size(); ++i) {
+        paragraphsFile << i + 1 << ". (Common words: " << tomSimilar[i].second << ") " << tomSimilar[i].first << "\n";
     }
-    paragraphsFile << "\nTop 10 Similar Paragraphs from Huckleberry Finn:\n";
-    for (const auto& pair : huckSimilar) {
-        paragraphsFile << pair.first << "\n";
+
+    paragraphsFile << "\nTop 10 Similar Paragraphs from Huckleberry Finn (Similarity based on common word count):\n";
+    for (size_t i = 0; i < huckSimilar.size(); ++i) {
+        paragraphsFile << i + 1 << ". (Common words: " << huckSimilar[i].second << ") " << huckSimilar[i].first << "\n";
     }
 
     // Closing files
